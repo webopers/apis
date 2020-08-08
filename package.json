@@ -1,33 +1,36 @@
 {
-  "name": "apis.webopers.com",
-  "version": "1.0.0",
-  "description": "Webopers APIs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/webopers/apis.git"
-  },
-  "keywords": [
-    "apis",
-    "api",
-    "webopers",
-    "encacap"
-  ],
-  "author": "Webopers Group, Nguyen Khac Khanh (Encacap)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/webopers/apis/issues"
-  },
-  "homepage": "https://github.com/webopers/apis#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.6.0",
-    "eslint-config-google": "^0.14.0"
-  }
+    "name": "apis.webopers.com",
+    "version": "1.0.0",
+    "description": "Webopers APIs",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon ./src/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/webopers/apis.git"
+    },
+    "keywords": [
+        "apis",
+        "api",
+        "webopers",
+        "encacap"
+    ],
+    "author": "Webopers Group, Nguyen Khac Khanh (Encacap)",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/webopers/apis/issues"
+    },
+    "homepage": "https://github.com/webopers/apis#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.6.0",
+        "eslint-config-airbnb-base": "^14.2.0",
+        "eslint-config-google": "^0.14.0",
+        "eslint-plugin-import": "^2.22.0",
+        "nodemon": "^2.0.4"
+    }
 }
