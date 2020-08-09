@@ -2,10 +2,17 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
 const createToken = require('../../util/token/createToken');
+const { verifyRegister, verifyLogin } = require('../../util/data/verifyRequest');
 
 class AuthController {
     // eslint-disable-next-line class-methods-use-this
     async register(req, res) {
+        const { error } = verifyRegister(req.body);
+
+        if (error) {
+            return res.status(400).send({ code: 'auth/data-invalid', status: error.details[0].message });
+        }
+
         const { email, username, password } = req.body;
         // Checking if user is already in the Database
         const existEmail = await User.findOne({ email });
@@ -34,14 +41,20 @@ class AuthController {
             const token = createToken(user);
             user._id = savedUser._id;
             res.send({ token });
-        } catch (error) {
-            res.status(400).send(error);
+        } catch (err) {
+            res.status(400).send(err);
         }
         return user;
     }
 
     // eslint-disable-next-line class-methods-use-this
     async login(req, res) {
+        const { error } = verifyLogin(req.body);
+
+        if (error) {
+            return res.status(400).send({ code: 'auth/data-invalid', status: error.details[0].message });
+        }
+
         const { email = '', password } = req.body;
         const user = await User.findOne({ email });
 
