@@ -61,13 +61,13 @@ class AuthController {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).send({ code: 'auth/not-exist', status: 'user does not exist' });
+            return res.status(401).send({ code: 'auth/not-exist', status: 'user does not exist' });
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
 
         if (!validPassword) {
-            return res.status(400).send({ code: 'auth/password-incorrect', status: 'password is incorrect' });
+            return res.status(401).send({ code: 'auth/password-incorrect', status: 'password is incorrect' });
         }
 
         const token = createToken(user);
