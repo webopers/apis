@@ -52,7 +52,9 @@ class AuthController {
         const { error } = verifyLogin(req.body);
 
         if (error) {
-            return res.status(400).send({ code: 'auth/data-invalid', status: error.details[0].message });
+            return res
+                .status(400)
+                .send({ code: 'auth/data-invalid', status: error.details[0].message, original: req.body });
         }
 
         const { email = '', password } = req.body;

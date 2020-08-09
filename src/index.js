@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const db = require('./app/configs/db');
 
 const app = express();
@@ -16,6 +17,7 @@ db.connect();
 
 // HTTP Logger
 app.use(morgan('combined'));
+app.use(cors());
 
 // Middleware
 app.use(express.json());
