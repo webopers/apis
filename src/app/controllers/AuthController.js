@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+
+const createToken = require('../../util/token/createToken');
 
 class AuthController {
     // eslint-disable-next-line class-methods-use-this
@@ -30,8 +31,9 @@ class AuthController {
 
         try {
             const savedUser = await user.save();
+            const token = createToken(user);
             user._id = savedUser._id;
-            res.send({ _id: user._id, username, email });
+            res.send({ token });
         } catch (error) {
             res.status(400).send(error);
         }
@@ -53,17 +55,7 @@ class AuthController {
             return res.status(400).send({ code: 'auth/password-incorrect', status: 'password is incorrect' });
         }
 
-        const token = jwt.sign(
-            {
-                _id: user._id,
-                username: user.username,
-                email: user.email,
-                name: user.name,
-                createBy: 'https://webopers.com',
-            },
-            // eslint-disable-next-line comma-dangle
-            process.env.TOKEN_SECRET
-        );
+        const token = createToken(user);
         return res.header('token', token).send({ token });
     }
 }
