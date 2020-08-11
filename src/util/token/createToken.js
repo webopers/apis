@@ -1,14 +1,8 @@
 const jwt = require('jsonwebtoken');
 
-const createToken = (user) => {
+const createToken = (tokenData) => {
     const token = jwt.sign(
-        {
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            name: user.name,
-            createBy: 'https://webopers.com',
-        },
+        { ...tokenData, createdBy: 'https://webopers.com' },
         // eslint-disable-next-line comma-dangle
         process.env.TOKEN_SECRET
     );

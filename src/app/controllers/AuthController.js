@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const shortID = require('shortid');
 const User = require('../models/User');
 
 const createToken = require('../../util/token/createToken');
@@ -28,19 +29,26 @@ class AuthController {
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        const secretKey = shortID.generate();
 
         const user = new User({
             username,
             email,
             password: hashedPassword,
             name: req.body.name,
+            secretKey,
         });
 
         try {
             const savedUser = await user.save();
-            const token = createToken(user);
+            const token = createToken({ _id: savedUser._id, secretKey });
             user._id = savedUser._id;
-            res.send({ token });
+            return res
+                .cookie('access_token', token, {
+                    maxAge: 365 * 24 * 60 * 60 * 1000,
+                    httpOnly: true,
+                })
+                .send({ code: 'auth/success', status: 'register success', data: { _id: user._id } });
         } catch (err) {
             res.status(400).send(err);
         }
@@ -58,10 +66,12 @@ class AuthController {
         }
 
         const { email = '', password } = req.body;
-        const user = await User.findOne({ email });
+        let user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(401).send({ code: 'auth/not-exist', status: 'user does not exist' });
+            return res
+                .status(401)
+                .send({ code: 'auth/not-exist', status: 'user does not exist', original: req.body });
         }
 
         const validPassword = await bcrypt.compare(password, user.password);
@@ -70,8 +80,19 @@ class AuthController {
             return res.status(401).send({ code: 'auth/password-incorrect', status: 'password is incorrect' });
         }
 
-        const token = createToken(user);
-        return res.header('token', token).send({ token });
+        const secretKey = shortID.generate();
+
+        user.secretKey = secretKey;
+
+        user = await user.save();
+
+        const token = createToken({ _id: user._id, secretKey });
+        return res
+            .cookie('access_token', token, {
+                maxAge: 365 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            })
+            .send({ code: 'auth/success', status: 'login success', data: { _id: user._id, secretKey } });
     }
 }
 
