@@ -1,10 +1,10 @@
 const express = require('express');
 
-const verify = require('../util/token/verifyToken');
+const verifyToken = require('../util/token/verifyToken');
 const userController = require('../app/controllers/UserController');
 
 const router = express.Router();
 
-router.get('/information', verify, userController.information);
+router.get('/information', verifyToken, userController.information);
 
 module.exports = router;
