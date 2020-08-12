@@ -11,6 +11,7 @@ const port = process.env.PORT || 4000;
 // Import Routers
 const authRouter = require('./routers/auth');
 const userRouter = require('./routers/user');
+const courseRouter = require('./routers/course');
 
 // Config .env
 dotenv.config();
@@ -26,5 +27,6 @@ app.use(express.json());
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/course', courseRouter);
 
 app.listen(port, () => console.log(`Server is starting at localhost:${port}`));
