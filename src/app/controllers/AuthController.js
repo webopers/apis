@@ -41,7 +41,7 @@ class AuthController {
 
         try {
             const savedUser = await user.save();
-            const token = createToken({ _id: savedUser._id, secretKey });
+            const token = createToken({ _id: savedUser._id });
             user._id = savedUser._id;
             return res
                 .cookie('access_token', token, {
@@ -86,7 +86,7 @@ class AuthController {
 
         user = await user.save();
 
-        const token = createToken({ _id: user._id, secretKey });
+        const token = createToken({ _id: user._id });
         return res
             .cookie('access_token', token, {
                 maxAge: 365 * 24 * 60 * 60 * 1000,
