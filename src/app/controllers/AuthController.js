@@ -66,7 +66,7 @@ class AuthController {
         }
 
         const { email = '', password } = req.body;
-        let user = await User.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             return res
@@ -80,11 +80,7 @@ class AuthController {
             return res.status(401).send({ code: 'auth/password-incorrect', status: 'password is incorrect' });
         }
 
-        const secretKey = shortID.generate();
-
-        user.secretKey = secretKey;
-
-        user = await user.save();
+        const { secretKey } = user;
 
         const token = createToken({ _id: user._id, secretKey });
         return res
@@ -92,7 +88,7 @@ class AuthController {
                 maxAge: 365 * 24 * 60 * 60 * 1000,
                 httpOnly: true,
             })
-            .send({ code: 'auth/success', status: 'login success', data: { _id: user._id, secretKey } });
+            .send({ code: 'auth/success', status: 'login success', data: { _id: user._id } });
     }
 }
 
