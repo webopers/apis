@@ -25,6 +25,10 @@ const User = new Schema(
             max: 255,
             min: 4,
         },
+        avatar: {
+            type: String,
+            default: '',
+        },
         secretKey: {
             type: String,
             required: true,

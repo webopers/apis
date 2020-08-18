@@ -3,8 +3,14 @@ const User = require('../models/User');
 class UserController {
     // eslint-disable-next-line class-methods-use-this
     async information(req, res) {
-        const { _id, name, username, email } = await User.findById(req.user._id);
-        return res.send({ _id, name, username, email });
+        const responseData = {
+            code: 'user/success',
+            status: 'success',
+        };
+        const user = await User.findById(req.user._id);
+        delete user.password;
+        responseData.data = user;
+        res.send(responseData);
     }
 }
 
